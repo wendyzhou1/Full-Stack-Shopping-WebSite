@@ -1,0 +1,134 @@
+<div class="profile-container">
+  <button class="back-button" (click)="goHome()">⬅ Back</button>
+  <h1>My Profile</h1>
+
+  <div class="profile-actions">
+    <button (click)="signOut()">Sign Out</button>
+  </div>
+  <div class="tabs">
+    <button (click)="activeTab = 'edit'">Edit Profile</button>
+    <button (click)="activeTab = 'password'">Change Password</button>
+    <button (click)="activeTab = 'listings'">Manage Listings</button>
+    <button (click)="activeTab = 'comments'">View Comments</button>
+    <button (click)="activeTab = 'wishlist'">My Wishlist</button>
+  </div>
+
+  <!-- Edit Profile -->
+  <div *ngIf="activeTab === 'edit'" class="tab-panel">
+    <form [formGroup]="editForm" (ngSubmit)="updateProfile()">
+      <input type="text" name="fake-username" style="display:none">
+      <input type="password" name="fake-password" style="display:none">
+
+      <label>First Name: <input formControlName="firstname" /></label>
+      <label>Last Name: <input formControlName="lastname" /></label>
+      <label>Email: <input formControlName="email" /></label>
+      <label>Password (confirm):<input type="password" formControlName="password" required autocomplete="off" />
+      </label>
+      <button type="submit" [disabled]="editForm.invalid || loading">Update Profile (requires password)</button>
+    </form>
+  </div>
+
+  <!-- Change Password -->
+  <div *ngIf="activeTab === 'password'" class="tab-panel">
+    <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+      <label>Current Password: <input type="password" formControlName="currentPassword" /></label>
+      <label>
+        New Password:
+        <input type="password" formControlName="newPassword" />
+      </label>
+      <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+        <small *ngIf="passwordForm.get('newPassword')?.errors?.['pattern']" style="color: red;">
+          Password must be at least 8 characters, include uppercase, lowercase, number, and special character.
+        </small>
+      </div>
+      <button type="submit" [disabled]="passwordForm.invalid || loading">Change Password</button>
+    </form>
+  </div>
+
+  <!-- Manage Listings -->
+  <div *ngIf="activeTab === 'listings'" class="tab-panel">
+    <h4>Add New Listing</h4>
+    <form [formGroup]="newListingForm" (ngSubmit)="addListing()">
+      <label>Title: <input formControlName="title" /></label>
+      <label>Price: <input type="number" formControlName="price" /></label>
+      <label>Brand:
+        <select formControlName="brand">
+          <option *ngFor="let b of brands" [value]="b">{{ b }}</option>
+        </select>
+      </label>
+      <label>Stock: <input type="number" formControlName="stock" /></label>
+      <button type="submit" [disabled]="newListingForm.invalid || loading">Add</button>
+    </form>
+
+    <h3>My Listings</h3>
+    <div *ngIf="listings.length === 0">
+      <p>No listings found.</p>
+    </div>
+    <ul *ngIf="listings.length > 0">
+      <li *ngFor="let l of listings">
+        <div class="listing-item">
+          <p><strong>{{ l.title }}</strong> - {{ l.brand }} - ${{ l.price }}</p>
+          <p>Stock: {{ l.stock }} | Status:
+            <span [style.color]="l.disabled ? 'gray' : 'green'">{{ l.disabled ? 'Disabled' : 'Active' }}</span>
+          </p>
+          <label>
+            <input type="checkbox" [checked]="l.disabled" (change)="toggleListingStatus(l)" />
+            Disable
+          </label>
+          <button (click)="deleteListing(l._id)">Delete</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+
+  <!-- View Comments -->
+  <div *ngIf="activeTab === 'comments'" class="tab-panel">
+    <h3>Comments on My Listings</h3>
+    <div *ngIf="groupedComments.length === 0">
+      <p>No comments on your listings yet.</p>
+    </div>
+    <div *ngFor="let group of groupedComments" class="comment-card">
+      <div class="comment-header">
+        <img class="comment-img" [src]="'assets/phone_default_images/' + group.brand + '.jpeg'"
+          alt="{{ group.productTitle }}" />
+        <h4>{{ group.productTitle }}</h4>
+      </div>
+
+      <ul>
+        <li *ngFor="let c of group.comments">
+          <p><strong>{{ c.reviewerName || 'Anonymous' }}</strong> ⭐ {{ c.rating }}</p>
+          <p>{{ c.comment }}</p>
+          <p>Status:
+            <span [style.color]="c.hidden ? 'gray' : 'green'">
+              {{ c.hidden ? 'Hidden' : 'Visible' }}
+            </span>
+          </p>
+          <button (click)="toggleCommentVisibility(c)">
+            {{ c.hidden ? 'Show Comment' : 'Hide Comment' }}
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- Wishlist -->
+  <div *ngIf="activeTab === 'wishlist'" class="tab-panel">
+    <h3>My Wishlist</h3>
+    <div *ngIf="wishlist.length === 0">
+      <p>Your wishlist is empty.</p>
+    </div>
+
+    <div class="wishlist-grid" *ngIf="wishlist.length > 0">
+      <div class="wishlist-card" *ngFor="let item of wishlist">
+        <img [src]="'assets/phone_default_images/' + item.brand + '.jpeg'" alt="{{ item.title }}" />
+        <div class="wishlist-info">
+          <h4>{{ item.title }}</h4>
+          <p><strong>Brand:</strong> {{ item.brand }}</p>
+          <p><strong>Price:</strong> ${{ item.price }}</p>
+          <button (click)="goToItem(item)">View</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,60 @@
+<div class="top-bar">
+  <a (click)="goToDashboard()" class="back-button">Back to Dashboard</a>
+</div>
+<h2 class="page-title">📝 Comments & Review Management</h2>
+
+<div class="search-bar-container">
+  <input
+    type="text"
+    [(ngModel)]="search"
+    (keyup.enter)="searchReviews()"
+    placeholder="Search by reviewer, comment, or product..."
+    class="search-input"
+  />
+  <button (click)="searchReviews()" class="search-btn">Search</button>
+</div>
+
+<div class="sort-bar-container">
+  <label for="sortSelect">Sort by:</label>
+  <select id="sortSelect" [(ngModel)]="sortOption" (change)="onSortChange()">
+    <option value="name-asc">Product Name (A-Z)</option>
+    <option value="name-desc">Product Name (Z-A)</option>
+    <option value="rating-desc">Rating (High to Low)</option>
+    <option value="rating-asc">Rating (Low to High)</option>
+  </select>
+</div>
+
+<div class="review-management-container">
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngFor="let r of reviews" class="review-card">
+    <div class="review-header">
+      <h3>📱 {{ r.product?.title }}</h3>
+  </div>
+
+    <div class="review-body">
+      <div>🧑‍💼 <strong>{{ r.user?.firstname }} {{ r.user?.lastname }}</strong> ⭐ {{ r.rating }}</div>
+      <p>{{ r.comment }}</p>
+    </div>
+
+    <div class="review-footer">
+      <div class="status-line">
+        Status:
+        <span [ngClass]="r.hidden ? 'status-hidden' : 'status-visible'">
+          {{ r.hidden ? 'Hidden' : 'Visible' }}
+        </span>
+      </div>
+      <button class="action-btn" [ngClass]="r.hidden ? 'show-btn' : 'hide-btn'" (click)="toggleVisibility(r)">
+        {{ r.hidden ? 'Show Comment' : 'Hide Comment' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="pagination" *ngIf="!loading && totalPages > 1">
+    <button (click)="goToPage(page - 1)" [disabled]="page === 1">Previous</button>
+    <span>Page {{ page }} of {{ totalPages }}</span>
+    <input type="number" min="1" [max]="totalPages" [(ngModel)]="pageJump" placeholder="Page #" />
+    <button (click)="jumpToPage()">Go</button>
+    <button (click)="goToPage(page + 1)" [disabled]="page === totalPages">Next</button>
+  </div>
+</div>

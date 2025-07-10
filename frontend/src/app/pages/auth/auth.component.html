@@ -1,0 +1,42 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h2 *ngIf="mode === 'login'">Login</h2>
+    <h2 *ngIf="mode === 'register'">Register</h2>
+    <h2 *ngIf="mode === 'forgot'">Reset Password</h2>
+
+    <!-- login -->
+    <form *ngIf="mode === 'login'" (ngSubmit)="submitLogin(loginForm.value)" #loginForm="ngForm">
+      <input type="email" placeholder="Email" name="email" ngModel required />
+      <input type="password" placeholder="Password" name="password" ngModel required />
+      <button type="submit">Login</button>
+      <p>
+        No account? <a (click)="switchMode('register')">Register</a> |
+        <a (click)="switchMode('forgot')">Forgot Password?</a>
+      </p>
+    </form>
+
+    <!-- register -->
+    <form *ngIf="mode === 'register'" (ngSubmit)="submitRegister(registerForm.value)" #registerForm="ngForm">
+      <input type="text" placeholder="First Name" name="firstname" ngModel required />
+      <input type="text" placeholder="Last Name" name="lastname" ngModel required />
+      <input type="email" placeholder="Email" name="email" ngModel required />
+      <input type="password" placeholder="Password" name="password" ngModel required />
+      <button type="submit">Register</button>
+      <p>
+        Already have an account? <a (click)="switchMode('login')">Login</a>
+      </p>
+    </form>
+
+    <!-- foget password -->
+    <form *ngIf="mode === 'forgot'" (ngSubmit)="submitForgot()" #forgotForm="ngForm">
+      <input type="email" placeholder="Your registered email" name="email" [(ngModel)]="forgotData.email" required />
+      <button type="submit">Send Reset Link</button>
+      <p>
+        <a (click)="switchMode('login')">Back to Login</a>
+      </p>
+    </form>
+
+    <!-- back home -->
+    <button class="back-home" (click)="router.navigate(['/home'])">← Back to Home</button>
+  </div>
+</div>

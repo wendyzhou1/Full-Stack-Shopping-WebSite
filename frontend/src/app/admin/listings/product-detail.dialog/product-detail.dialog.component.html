@@ -1,0 +1,27 @@
+<div class="dialog-container scrollable-detail-dialog">
+  <h2 class="dialog-title">📦 {{ product.title }} Details</h2>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngIf="!loading" class="dialog-body">
+    <div class="detail-section">
+      <p><strong>Brand:</strong> {{ product.brand }}</p>
+      <p><strong>Price:</strong> ¥{{ product.price }}</p>
+      <p><strong>Stock:</strong> {{ product.stock }}</p>
+    </div>
+
+    <div class="detail-section">
+      <h3>👤 Seller Info</h3>
+      <p>{{ seller?.firstname }} {{ seller?.lastname }} ({{ seller?.email }})</p>
+    </div>
+
+    <div class="detail-section">
+      <h3>📝 Review List</h3>
+      <ul>
+        <li *ngFor="let r of reviews">
+          {{ r.comment }} (⭐ {{ r.rating }})
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="log-container">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>📈 Sales Log</h2>
+    <button class="back-dashboard-btn" (click)="goToDashboard()">&larr; Back to Dashboard</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading data...</div>
+
+  <div *ngIf="!loading">
+    <div class="button-group">
+      <button mat-raised-button color="primary" (click)="downloadJSON()">Export JSON</button>
+      <button mat-raised-button color="accent" (click)="downloadCSV()">Export CSV</button>
+    </div>
+
+    <table mat-table class="sales-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Buyer</th>
+          <th>Product Details</th>
+          <th>Total Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>{{ log.timestamp | date:'short' }}</td>
+          <td>{{ log.buyer?.firstname }} {{ log.buyer?.lastname }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let item of log.items">
+                {{ item.product?.title }} × {{ item.quantity }}
+              </li>
+            </ul>
+          </td>
+          <td>¥{{ log.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="adminLogsLoading" class="loading">Loading notifications...</div>
+  <div *ngIf="!adminLogsLoading && adminLogs.length > 0">
+    <h3>🛎️ Order Notifications</h3>
+    <table class="admin-log-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Message</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of adminLogs">
+          <td>{{ log.createdAt | date:'short' }}</td>
+          <td>{{ log.type }}</td>
+          <td>{{ log.message }}</td>
+          <td>
+            <ng-container *ngIf="log.data">
+              <div *ngIf="log.data.totalAmount">Total: ${{ log.data.totalAmount }}</div>
+              <div *ngIf="log.data.items">
+                <ul>
+                  <li *ngFor="let item of log.data.items">
+                    {{ item.title }} × {{ item.quantity }}
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

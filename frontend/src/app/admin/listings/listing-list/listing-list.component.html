@@ -1,0 +1,56 @@
+<div class="top-bar">
+  <a (click)="goToDashboard()" class="back-button">Back to Dashboard</a>
+</div>
+
+<div class="listing-management-container">
+  <h2 class="page-title">📦 Product Listings Management</h2>
+
+  <div class="search-bar-container">
+    <input [(ngModel)]="search" class="search-input" placeholder="Search by title or brand" />
+    <button class="search-btn" (click)="searchListings()">Search</button>
+  </div>
+
+  <div class="sort-bar-container">
+    <label for="sortSelect">Sort by:</label>
+    <select id="sortSelect" [(ngModel)]="sortOption" (change)="onSortChange()">
+      <option value="name-asc">Name (A-Z)</option>
+      <option value="name-desc">Name (Z-A)</option>
+      <option value="price-desc">Price (High to Low)</option>
+      <option value="price-asc">Price (Low to High)</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngFor="let item of listings" class="listing-card">
+    <div class="listing-row">
+      <strong>📱 {{ item.title }}</strong>
+    </div>
+    <div class="listing-details">
+      <div><strong>Brand:</strong> {{ item.brand }}</div>
+      <div><strong>Price:</strong> ¥{{ item.price }}</div>
+      <div><strong>Stock:</strong> {{ item.stock }}</div>
+      <div><strong>Status:</strong> 
+        <span [ngClass]="item.disabled ? 'status-disabled' : 'status-active'">
+          {{ item.disabled ? 'Disabled' : 'Active' }}
+        </span>
+      </div>
+    </div>
+    <div class="listing-actions">
+      <button class="action-btn detail-btn" (click)="openDetail(item)">Detail</button>
+      <button class="action-btn edit-btn" (click)="openEdit(item)">Edit</button>
+      <button class="action-btn delete-btn" (click)="deleteListing(item._id)">Delete</button>
+      <button class="action-btn" [ngClass]="item.disabled ? 'enable-btn' : 'disable-btn'" (click)="toggleListingDisabled(item)">
+        {{ item.disabled ? 'Enable' : 'Disable' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="pagination" *ngIf="!loading && totalPages > 1">
+    <button (click)="goToPage(page - 1)" [disabled]="page === 1">Previous</button>
+    <span>Page {{ page }} of {{ totalPages }}</span>
+    <button (click)="goToPage(page + 1)" [disabled]="page === totalPages">Next</button>
+    <input type="number" min="1" [max]="totalPages" [(ngModel)]="pageJump" placeholder="Page #" />
+    <button (click)="jumpToPage()">Go</button>
+  </div>
+</div>

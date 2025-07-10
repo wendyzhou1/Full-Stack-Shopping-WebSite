@@ -1,0 +1,42 @@
+<div class="user-management-container">
+  <h2 class="page-title">👥 User Management</h2>
+
+  <div class="top-bar">
+    <a (click)="goToDashboard()" class="back-button">Back to Dashboard</a>
+  </div>
+
+  <div class="search-bar-container">
+    <input [(ngModel)]="search" placeholder="Search by name or email" class="search-input" />
+    <button (click)="searchUsers()" class="search-btn">Search</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngFor="let user of users" class="user-card" [ngClass]="{'user-disabled': user.disabled}">
+    <div class="user-info">
+      <div><strong>Name:</strong> {{ user.firstname }} {{ user.lastname }}</div>
+      <div><strong>Email:</strong> {{ user.email }}</div>
+      <div><strong>Last Login:</strong> {{ user.lastLogin | date: 'short' }}</div>
+    </div>
+    <div class="user-actions">
+      <button class="detail-btn" (click)="openDetail(user)">Detail</button>
+      <button class="edit-btn" (click)="openEdit(user)">Edit</button>
+      <ng-container *ngIf="user.role !== 'admin' && !user.isAdmin">
+        <button 
+          [ngClass]="user.disabled ? 'enable-btn' : 'disable-btn'" 
+          (click)="toggleUserDisabled(user)">
+          {{ user.disabled ? 'Enable' : 'Disable' }}
+        </button>
+        <button class="delete-btn" (click)="deleteUser(user._id)">Delete</button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="pagination" *ngIf="!loading && totalPages > 1">
+    <button (click)="goToPage(page - 1)" [disabled]="page === 1">Previous</button>
+    <span>Page {{ page }} of {{ totalPages }}</span>
+    <button (click)="goToPage(page + 1)" [disabled]="page === totalPages">Next</button>
+    <input type="number" min="1" [max]="totalPages" [(ngModel)]="pageJump" placeholder="Page #" style="width: 60px; margin-left: 10px;" />
+    <button (click)="jumpToPage()">Go</button>
+  </div>
+</div>

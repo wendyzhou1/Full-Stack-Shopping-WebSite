@@ -1,0 +1,46 @@
+<div class="user-detail-dialog scrollable-detail-dialog">
+  <h2 class="dialog-title">User Details</h2>
+
+  <div class="info-row">
+    <label>Full Name:</label>
+    <span>{{ user.firstname }} {{ user.lastname }}</span>
+  </div>
+
+  <div class="info-row">
+    <label>Email:</label>
+    <span>{{ user.email }}</span>
+  </div>
+
+  <div class="info-row">
+    <label>Last Login:</label>
+    <span>{{ user.lastLogin || 'N/A' }}</span>
+  </div>
+
+  <hr />
+
+  <h3 class="section-title">Listings</h3>
+  <div *ngIf="listings.length > 0; else noListings">
+    <ul class="item-list">
+      <li *ngFor="let item of listings">
+        {{ item.title }} - ${{ item.price }} - Stock: {{ item.stock }}
+      </li>
+    </ul>
+  </div>
+  <ng-template #noListings>
+    <p class="empty-text">No listings found.</p>
+  </ng-template>
+
+  <hr />
+
+  <h3 class="section-title">Reviews</h3>
+  <div *ngIf="reviews.length > 0; else noReviews">
+    <ul class="item-list">
+      <li *ngFor="let review of reviews">
+        <strong>{{ review.productTitle }}</strong>: {{ review.comment }} (Rating: {{ review.rating }})
+      </li>
+    </ul>
+  </div>
+  <ng-template #noReviews>
+    <p class="empty-text">No reviews found.</p>
+  </ng-template>
+</div>

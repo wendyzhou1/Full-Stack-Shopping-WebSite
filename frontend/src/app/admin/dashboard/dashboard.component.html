@@ -1,0 +1,10 @@
+<h2 class="title">Admin Management Interface</h2>
+
+<nav class="admin-nav">
+  <button (click)="navigate('/admin/users')">User Management</button>
+  <button (click)="navigate('/admin/listings')">List Management</button>
+  <button (click)="navigate('/admin/reviews')">Comments & Review</button>
+  <button (click)="navigate('/admin/logs')">Sales & Activity Logs</button>
+  <button (click)="exportAdminLogs()">Export Admin Operation Log (CSV)</button>
+  <button class="logout" (click)="logout()">Logout</button>
+</nav>

@@ -1,0 +1,143 @@
+.checkout-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item-img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.item-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.item-info h4 {
+  margin: 0 0 0.5rem;
+}
+
+.cart-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+.cart-controls label {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cart-controls input[type='number'] {
+  width: 60px;
+  padding: 4px;
+  font-size: 14px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.update-btn,
+.remove-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.update-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.update-btn:hover {
+  background-color: #0056b3;
+}
+
+.remove-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.remove-btn:hover {
+  background-color: #b02a37;
+}
+
+hr {
+  margin-top: 2rem;
+  border: 1px solid #eee;
+}
+
+h3 {
+  text-align: right;
+  font-size: 18px;
+  margin-top: 1rem;
+}
+
+.confirm-btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirm-btn:hover {
+  background-color: #218838;
+}
+
+.confirm-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

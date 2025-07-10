@@ -1,0 +1,242 @@
+<div class="main-wrapper">
+  <div class="topbar">
+    <h1 class="logo">OldPhoneDeals</h1>
+
+    <div class="search-box">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search phones..." (keyup.enter)="search()" />
+      <button (click)="search()">Search</button>
+    </div>
+
+    <div class="topbar-buttons">
+      <button (click)="goToCheckout()">Checkout</button>
+      <ng-container *ngIf="!isLoggedIn">
+        <button (click)="goToAuth()">Sign In</button>
+      </ng-container>
+      <ng-container *ngIf="isLoggedIn">
+        <button routerLink="/profile">Profile</button>
+        <button (click)="signOut()">Sign Out</button>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div *ngIf="state === 'search'" class="filters">
+    <button (click)="backToHome()">⬅ Back to Home</button>
+    <h2>Search Results</h2>
+    <label>Brand:
+      <select [(ngModel)]="filterBrand" (change)="search()">
+        <option value="">All</option>
+        <option *ngFor="let brand of brands">{{ brand }}</option>
+      </select>
+    </label>
+
+    <label>Max Price:
+      <input type="range" [(ngModel)]="filterPriceMax" min="0" max="1000" (input)="search()" />
+      <span>{{ filterPriceMax }}</span>
+    </label>
+    <label>Sort by Price:
+      <select [(ngModel)]="sortOrder" (change)="search()">
+        <option value="">None</option>
+        <option value="asc">Price: Low to High</option>
+        <option value="desc">Price: High to Low</option>
+      </select>
+    </label>
+
+  </div>
+
+  <!-- Home State -->
+  <div *ngIf="state === 'home'" class="home-container">
+    <h2>📉 Sold Out Soon</h2>
+    <div class="grid">
+      <div *ngFor="let phone of soldOutSoon" class="card" (click)="selectPhone(phone)">
+        <img [src]="'assets/phone_default_images/' + phone.brand + '.jpeg'" alt="{{ phone.title }}" />
+        <h4>{{ phone.title }}</h4>
+        <p>💲{{ phone.price }}</p>
+        <p>📦 {{ phone.stock }} in stock</p>
+      </div>
+    </div>
+
+    <h2>🔥 Best Sellers</h2>
+    <div class="grid">
+      <div *ngFor="let phone of bestSellers" class="card" (click)="selectPhone(phone)">
+        <img [src]="'assets/phone_default_images/' + phone.brand + '.jpeg'" alt="{{ phone.title }}" />
+        <h4>{{ phone.title }}</h4>
+        <p>⭐ {{ phone.avgRating?.toFixed(1) }}</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Search State -->
+  <div *ngIf="state === 'search'" class="search-container">
+    <div class="grid">
+      <div *ngFor="let phone of searchResults" class="card" (click)="selectPhone(phone)">
+        <img [src]="'assets/phone_default_images/' + phone.brand + '.jpeg'" alt="{{ phone.title }}" />
+        <h4>{{ phone.title }}</h4>
+        <p>💲{{ phone.price }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Item Detail State -->
+  <div *ngIf="state === 'item'" class="item-container">
+    <button class="back-btn" (click)="backToHome()">⬅ Back</button>
+
+    <!-- item detail -->
+    <div class="item-header">
+      <!-- left content -->
+      <div class="item-details">
+        <h1>{{ selectedPhone.title }}</h1>
+        <h3 class="brand">{{ selectedPhone.brand }}</h3>
+
+        <div class="price-box">
+          <span *ngIf="selectedPhone.originalPrice" class="price-old">💲{{ selectedPhone.originalPrice }}</span>
+          <span class="price-now">💲{{ selectedPhone.price }}</span>
+        </div>
+
+        <p><strong>Stock:</strong> {{ selectedPhone.stock }}</p>
+        <p><strong>Seller:</strong> {{ selectedPhone.sellerName}}</p>
+
+        <!-- add cart -->
+        <button (click)="onAddToCartClick()">🛒 Add to Cart</button>
+
+
+        <!-- number chosen -->
+        <div *ngIf="showCartModal" class="modal-overlay">
+          <div class="modal-box">
+            <h3 class="modal-title">Add to Cart</h3>
+
+            <div class="modal-content">
+              <label for="qty">Quantity:</label>
+              <input id="qty" type="number" [(ngModel)]="selectedQuantity" min="1"
+                [max]="selectedPhone.stock - getCartQuantity(selectedPhone.title)" />
+            </div>
+
+            <div class="modal-actions">
+              <button class="confirm-btn" (click)="confirmAddToCart()">Confirm</button>
+              <button class="cancel-btn" (click)="showCartModal = false">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+
+        <p>🧮 The quantity of this item in the shopping cart: {{ getCartQuantity(selectedPhone.title) }}</p>
+
+        <!-- wishlist -->
+        <button (click)="toggleWishlist(selectedPhone)">
+          {{ isInWishlist ? '💖 In Wishlist' : '🤍 Add to Wishlist' }}
+        </button>
+
+
+      </div>
+
+      <!-- img -->
+      <div class="item-image">
+        <img [src]="'assets/phone_default_images/' + selectedPhone.brand + '.jpeg'" alt="{{ selectedPhone.title }}" />
+      </div>
+    </div>
+
+    <!-- reviews -->
+    <h3>Reviews</h3>
+
+    <div *ngFor="let review of reviews" class="review" [ngClass]="{ 'hidden-comment': review.hidden }">
+      <ng-container *ngIf="canViewComment(review); else hiddenBlock">
+        <p><strong>{{ review.reviewerName || 'Anonymous' }}</strong> ⭐ {{ review.rating }}</p>
+        <p>
+          <span *ngIf="review.hidden" class="hidden-label">(hidden)</span>
+          {{ review.showFull ? review.comment : (review.comment | slice:0:200) + (review.comment.length > 200 ? '...' :
+          '') }}
+          <button *ngIf="review.comment.length > 200" (click)="review.showFull = !review.showFull">
+            {{ review.showFull ? 'Show Less' : 'Show More' }}
+          </button>
+        </p>
+      </ng-container>
+
+
+      <ng-template #hiddenBlock>
+        <p class="hidden-placeholder">This comment is hidden and you cannot view it.</p>
+      </ng-template>
+    </div>
+
+    <div *ngIf="hasMoreReviews" class="more-reviews-wrapper">
+      <button class="show-more-btn" [disabled]="isLoadingReviews" (click)="showMoreReviews()">
+        {{ isLoadingReviews ? 'Loading...' : 'Show More Reviews' }}
+      </button>
+    </div>
+
+    <ng-template #noReviews>
+      <p>No reviews yet.</p>
+    </ng-template>
+
+    <!-- add review -->
+    <div class="review-form">
+      <h4>Add a Review</h4>
+      <textarea [(ngModel)]="newComment" placeholder="Write your review..."></textarea>
+
+      <div class="rating-row">
+        <label>Rating:
+          <select [(ngModel)]="newRating">
+            <option *ngFor="let r of [1, 2, 3, 4, 5]" [value]="r">{{ r }}</option>
+          </select>
+        </label>
+
+        <label>
+          <input type="checkbox" [(ngModel)]="hideComment" />
+          Hide this comment
+        </label>
+      </div>
+
+      <button class="submit-btn" (click)="postReview()">Submit Review</button>
+    </div>
+
+    <!-- cart item -->
+    <div *ngIf="state === 'item' && isLoggedIn" class="cart-tab-toggle-wrapper">
+      <div class="cart-tab-toggle" (click)="toggleCartTab()">
+        🛒
+        <span class="cart-badge" *ngIf="getTotalQuantity() > 0">{{ getTotalQuantity() }}</span>
+      </div>
+    </div>
+
+    <!-- cart -->
+    <div *ngIf="state === 'item' && isLoggedIn" class="cart-tab-wrapper" [class.open]="cartTabOpen">
+      <div class="cart-tab">
+        <h3>Your Cart</h3>
+
+        <ng-container *ngIf="cart.length > 0; else emptyCart">
+          <div *ngFor="let item of cart" class="cart-item">
+            <img [src]="'assets/phone_default_images/' + item.brand + '.jpeg'" class="cart-item-img"
+              alt="{{ item.title }}" />
+
+            <div class="cart-item-details">
+              <p class="cart-title">{{ item.title || '[Unknown Product]' }}</p>
+
+              <div class="cart-actions">
+                <button class="remove-link" (click)="removeFromCart(item)">Remove</button>
+
+                <div class="cart-quantity-controls">
+                  <button class="qty-btn" (click)="decreaseQuantity(item)" [disabled]="item.quantity <= 1"
+                    [class.disabled]="item.quantity <= 1">−</button>
+                  <span class="qty-display">{{ item.quantity }}</span>
+                  <button class="qty-btn" (click)="increaseQuantity(item)" [disabled]="item.quantity >= item.stock"
+                    [class.disabled]="item.quantity >= item.stock">+</button>
+                </div>
+              </div>
+
+              <p class="cart-price">Price: ${{ item.price }}</p>
+            </div>
+          </div>
+
+          <div class="cart-summary">
+            <p><strong>Total Quantity:</strong> {{ getTotalQuantity() }}</p>
+            <p><strong>Total:</strong> ${{ getCartTotalPrice().toFixed(2) }}</p>
+          </div>
+        </ng-container>
+
+
+        <ng-template #emptyCart>
+          <p>Your cart is empty.</p>
+        </ng-template>
+      </div>
+    </div>
+
+  </div>

@@ -1,0 +1,19 @@
+<div class="dialog-container">
+  <h2 class="dialog-title">🛠️ Edit Product</h2>
+
+  <form [formGroup]="form" class="edit-form">
+    <label>Title:</label>
+    <input formControlName="title" />
+
+    <label>Brand:</label>
+    <input formControlName="brand" />
+
+    <label>Price:</label>
+    <input type="number" formControlName="price" />
+
+    <label>Stock:</label>
+    <input type="number" formControlName="stock" />
+
+    <button (click)="save()" [disabled]="form.invalid">💾 Save</button>
+  </form>
+</div>

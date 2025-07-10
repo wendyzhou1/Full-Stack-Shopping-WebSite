@@ -1,0 +1,17 @@
+<div class="login-container">
+  <h2>Admin Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Email:</label>
+      <input type="email" formControlName="email" />
+    </div>
+    <div>
+      <label>Password:</label>
+      <input type="password" formControlName="password" />
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Login</button>
+
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+  </form>
+</div>

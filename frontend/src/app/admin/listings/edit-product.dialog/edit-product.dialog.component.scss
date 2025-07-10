@@ -1,0 +1,69 @@
+.dialog-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dialog-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.dialog-section {
+  margin-bottom: 20px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #444;
+  }
+  p, li {
+    margin: 4px 0;
+    color: #555;
+  }
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+}
+
+.save-btn {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
