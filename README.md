@@ -1,6 +1,6 @@
-# TUT3-G2-ASS2 readme
+# Readme
 
-# OldPhoneDeals - eCommerce Web Application (COMP5347/COMP4347 Assignment 2)
+# OldPhoneDeals - eCommerce Web Application
 
 This project is a full-stack MEAN (MongoDB, Express.js, Angular, Node.js) eCommerce platform for buying and selling used phones. It includes both user and admin interfaces with features such as authentication, product listing, reviews, and transaction logging.
 
@@ -137,16 +137,6 @@ Do not delete the super admin account.
 - Review moderation and visibility toggle
 - View/export sales logs
 - Audit logging
-
-## Team Members
-
-| Name         | SID        | Role                      |
-|--------------|------------|---------------------------|
-| Boyang Zhou  | 540224425  | User Interface Frontend, Database         |
-| Yanxin Zhou   | 540070800  | Backend, Database        |
-| Hao Fu      | 540224768  | Backend, Database            |
-| Zhenya Wang   | 530282587  | Admin Interface, Frontend  |
-
 
 
 
