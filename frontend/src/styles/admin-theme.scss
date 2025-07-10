@@ -1,0 +1,142 @@
+/* admin-theme.scss - Admin 页面统一视觉风格 */
+
+input,
+select,
+button,
+textarea {
+  font-family: inherit;
+  font-size: 16px;
+  padding: 6px 10px;
+  margin: 4px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #343a40;
+  padding: 12px 20px;
+  color: white;
+}
+.topbar .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+.topbar-buttons button {
+  margin-left: 10px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin: 20px 0;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+}
+.card img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+button.back-btn {
+  background-color: #6c757d;
+  margin-bottom: 16px;
+}
+button.disable-btn {
+  background-color: #dc3545;
+  color: #fff;
+}
+button.disable-btn:hover {
+  background-color: #a71d2a;
+}
+button.enable-btn {
+  background-color: #28a745;
+  color: #fff;
+}
+button.enable-btn:hover {
+  background-color: #1e7e34;
+}
+
+.disable-btn {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+.enable-btn {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+.user-disabled {
+  background-color: #ffeaea !important;
+  color: #b30000 !important;
+  font-style: italic;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 320px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.back-dashboard-btn {
+  position: absolute;
+  top: 32px;
+  right: 48px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  transition: background 0.2s;
+  z-index: 10;
+}
+.back-dashboard-btn:hover {
+  background: #1251a3;
+}
+
+.header {
+  position: relative;
+}
